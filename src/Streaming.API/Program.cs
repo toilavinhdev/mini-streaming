@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.FileProviders;
 using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 using Xabe.FFmpeg.Events;
@@ -11,6 +12,12 @@ builder.Services.AddEndpointsApiExplorer().AddSwaggerGen();
 var app = builder.Build();
 
 app.UseSwagger().UseSwaggerUI();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "wwwroot")),
+    RequestPath = ""
+});
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {
